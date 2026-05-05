@@ -1,29 +1,11 @@
 :root {
-  /* Brand Colors */
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --secondary: #64748b;
-  
-  /* Background Colors */
-  /* --bg-main: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-admin: #f1f5f9; */
-
-  /* Text Colors */
-  /* --text-main: #0f172a;
-  --text-muted: #475569;
-  --text-on-primary: #ffffff; */
-
-  /* Status Colors */
-  /* --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b; */
-
-  /* Interactive Elements */
-  /* --border: #e2e8f0;
-  --radius-lg: 12px;
-  --radius-md: 8px;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); */
+  --bg-dark: #121421;
+  --bg-card: #1b1e2f;
+  --bg-item: #24283d;
+  --primary-gradient: linear-gradient(90deg, #6366f1, #a855f7);
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --accent: #6366f1;
 }
 
 * {

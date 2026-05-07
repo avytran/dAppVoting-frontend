@@ -1,0 +1,27 @@
+.glass-panel {
+    background: rgba(23, 31, 51, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel:hover {
+    background: rgba(23, 31, 51, 0.45);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.2; }
+}
+
+.skeleton {
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

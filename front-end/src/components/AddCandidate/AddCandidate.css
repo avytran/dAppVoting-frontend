@@ -1,0 +1,327 @@
+/* AddCandidate.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.add-candidate-card {
+    max-width: 600px;
+    width: 100%;
+    background: rgba(12, 18, 28, 0.85);
+    backdrop-filter: blur(14px);
+    border-radius: 2rem;
+    border: 1px solid rgba(72, 187, 255, 0.2);
+    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-candidate-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 30px 50px -15px rgba(0, 180, 255, 0.2);
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+/* Header */
+.card-header {
+    padding: 1.5rem 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title-section i {
+    font-size: 1.8rem;
+    color: #3b82f6;
+    filter: drop-shadow(0 0 4px #3b82f680);
+}
+
+.title-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #f0f9ff, #7dd3fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.network-badge {
+    background: rgba(59, 130, 246, 0.2);
+    backdrop-filter: blur(4px);
+    padding: 0.4rem 1rem;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #7dd3fc;
+    border: 0.5px solid #3b82f660;
+    font-family: 'Space Mono', monospace;
+}
+
+.network-badge i {
+    margin-right: 6px;
+    font-size: 0.7rem;
+}
+
+/* Form Styles */
+.candidate-form {
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-label i {
+    color: #60a5fa;
+    font-size: 1rem;
+}
+
+.form-input,
+.form-textarea {
+    background: rgba(2, 8, 18, 0.7);
+    border: 1px solid rgba(72, 187, 255, 0.2);
+    border-radius: 1rem;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background: rgba(10, 20, 32, 0.9);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #475569;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-hint {
+    font-size: 0.7rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.form-hint::before {
+    content: "💡";
+    font-size: 0.7rem;
+}
+
+/* Gas Fees Box */
+.gas-fees-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.05));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 1.2rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.gas-fees-box i {
+    font-size: 1.8rem;
+    color: #10b981;
+}
+
+.gas-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gas-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+.gas-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    color: #4ade80;
+}
+
+.gas-tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.gas-tooltip i {
+    font-size: 1rem;
+    color: #64748b;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    bottom: 125%;
+    right: 0;
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.gas-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.submit-btn.submitting {
+    background: linear-gradient(135deg, #475569, #334155);
+}
+
+/* Toast Message */
+.toast-message {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.8rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 1100;
+    animation: slideUp 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.toast-message.success {
+    background: rgba(16, 185, 129, 0.9);
+    color: white;
+    border: 1px solid #34d399;
+}
+
+.toast-message.error {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: 1px solid #f87171;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .add-candidate-card {
+        border-radius: 1.5rem;
+    }
+    
+    .card-header {
+        padding: 1.2rem;
+    }
+    
+    .title-section h2 {
+        font-size: 1.2rem;
+    }
+    
+    .candidate-form {
+        padding: 1.2rem;
+    }
+    
+    .gas-fees-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .gas-value {
+        font-size: 1rem;
+    }
+    
+    .submit-btn {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+}

@@ -10,9 +10,9 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif; /* Hoặc font nào Huy thích */
+  font-family: 'Inter', sans-serif; 
 }
 
 main {
-  flex: 1; /* Đẩy Footer xuống cuối trang nếu nội dung ngắn */
+  flex: 1; 
 }

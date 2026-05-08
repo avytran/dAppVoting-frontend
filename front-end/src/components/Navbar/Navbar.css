@@ -1,13 +1,43 @@
-.navbar {
+.navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #1a1a1a;
+  padding: 15px 40px;
+  background-color: #0a0f1d;
   color: white;
+  border-bottom: 1px solid #1e293b;
 }
-.navbar-links {
+
+.logo {
+  font-weight: bold;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+}
+
+.logo span {
+  color: #3b82f6; /* Màu xanh của chữ CHAIN */
+}
+
+.wallet-section {
   display: flex;
-  list-style: none;
-  gap: 20px;
+  align-items: center;
+  gap: 15px;
+}
+
+.network-pill, .address-pill {
+  background-color: #1a1f2e;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #334155;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e; /* Chấm xanh lá Sepolia */
+  border-radius: 50%;
 }

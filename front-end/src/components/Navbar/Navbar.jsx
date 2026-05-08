@@ -3,14 +3,13 @@ import './Navbar.css';
 
 const Navbar = () => {
   return (
-    <nav className="navbar">
-      <div className="navbar-logo">DApp Voting</div>
-      <ul className="navbar-links">
-        <li>Trang chủ</li>
-        <li>Ứng viên</li>
-        <li>Kết quả</li>
-      </ul>
-    </nav>
+<nav className="navbar-container">
+  <div className="logo">VOTE<span>CHAIN</span></div>
+  <div className="wallet-section">
+     <div className="network-pill"><div className="dot"></div>Sepolia</div>
+     <div className="address-pill">0x7F4A...9E1B</div>
+  </div>
+</nav>
   );
 };
 

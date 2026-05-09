@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ElectionWindow.css';
 
-const ElectionWindow = () => {
+export const ElectionWindow = () => {
   const [startTime, setStartTime] = useState('11/01/2024, 09:00');
   const [endTime, setEndTime] = useState('11/05/2024, 06:00');
 
@@ -43,5 +43,3 @@ const ElectionWindow = () => {
     </div>
   );
 };
-
-export default ElectionWindow;

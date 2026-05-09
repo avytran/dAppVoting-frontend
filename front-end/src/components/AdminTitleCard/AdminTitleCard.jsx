@@ -1,7 +1,7 @@
 import React from 'react';
 import './AdminTitleCard.css';
 
-const AdminTitleCard = ({ walletAddress }) => {
+export const AdminTitleCard = ({ walletAddress }) => {
   return (
     <div className="admin-title-card">
       <div className="admin-content">
@@ -19,5 +19,3 @@ const AdminTitleCard = ({ walletAddress }) => {
     </div>
   );
 };
-
-export default AdminTitleCard;

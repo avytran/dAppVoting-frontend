@@ -1,10 +1,11 @@
-import './App.css'
+import './App.css';
+import AdminCandidateList from './components/AdminCandidateList/AdminCandidateList';
 
 function App() {
 
   return (
     <>
-    
+      <AdminCandidateList />
     </>
   )
 }

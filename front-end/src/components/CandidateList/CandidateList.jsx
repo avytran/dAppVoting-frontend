@@ -1,50 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './CandidateList.css';
 import CheckCircleIcon from '@mui/icons-material/Check';
-
-const candidatesData = [
-  {
-    id: "001",
-    name: "Marcus Thorne",
-    party: "Progressive Alliance",
-    votes: "64,301",
-    percentage: "45%",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
-    hasVoted: true,
-    estGas: null
-  },
-  {
-    id: "002",
-    name: "Elena Vance",
-    party: "Democratic Unity",
-    votes: "50,012",
-    percentage: "35%",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
-    hasVoted: false,
-    estGas: "~0.00021 ETH"
-  },
-  {
-    id: "003",
-    name: "Julian Lee",
-    party: "Vision Party",
-    votes: "28,580",
-    percentage: "20%",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Julian",
-    hasVoted: false,
-    estGas: "~0.00021 ETH"
-  }
-];
+import { MOCK_CANDIDATES } from '../../mocks/candidates';
 
 const CandidateList = () => {
+  const [candidates, setCandidates] = useState(MOCK_CANDIDATES);
+
   return (
     <div className="candidate-list-container">
       <div className="list-header">
         <h2 className="list-title">Candidate Polls</h2>
-        <span className="list-subtitle">{candidatesData.length} Candidates Participating</span>
+        <span className="list-subtitle">{candidates.length} Candidates Participating</span>
       </div>
 
       <div className="candidates-wrapper">
-        {candidatesData.map((candidate) => (
+        {candidates.map((candidate) => (
           <div 
             key={candidate.id} 
             className={`candidate-card ${candidate.hasVoted ? 'voted-style' : 'standard-style'}`}

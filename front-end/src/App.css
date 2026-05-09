@@ -1,9 +1,7 @@
-/* App.css */
 #root {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #050a15; /* Màu nền tối cho toàn bộ trang */
+  background-color: #050a15; 
   margin: 0;
   padding: 0;
 }

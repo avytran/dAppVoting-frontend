@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MOCK_ACTIVITIES } from '../../mocks/activities';
 import './ActivityCard.css';
 
-const ActivityCard = () => {
+export const ActivityCard = () => {
   const [activities, setActivities] = useState(MOCK_ACTIVITIES)
   const [secondsAgo, setSecondsAgo] = useState(23);
   const [showModal, setShowModal] = useState(false);
@@ -170,5 +170,3 @@ const ActivityCard = () => {
     </>
   );
 };
-
-export default ActivityCard;

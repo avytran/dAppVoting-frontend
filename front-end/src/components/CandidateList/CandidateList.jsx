@@ -3,7 +3,7 @@ import './CandidateList.css';
 import CheckCircleIcon from '@mui/icons-material/Check';
 import { MOCK_CANDIDATES } from '../../mocks/candidates';
 
-const CandidateList = () => {
+export const CandidateList = () => {
   const [candidates, setCandidates] = useState(MOCK_CANDIDATES);
 
   return (
@@ -89,5 +89,3 @@ const CandidateList = () => {
     </div>
   );
 };
-
-export default CandidateList;

@@ -1,7 +1,7 @@
 import React from 'react';
-import './Titlecard.css';
+import './TitleCard.css';
 
-const Titlecard = () => {
+export const TitleCard = () => {
   return (
     <div className="voting-banner">
       <div className="banner-main">
@@ -41,5 +41,3 @@ const Titlecard = () => {
     </div>
   );
 };
-
-export default Titlecard;

@@ -1,7 +1,8 @@
 import './MetricsCard.css';
 import chartIcon from "../../assets/icons/chart-icon.png";
+import { MOCK_CANDIDATES } from '../../mocks/candidates';
 
-export const MetricsCard = ({ candidates }) => {
+export const MetricsCard = ({ candidates = MOCK_CANDIDATES }) => {
   const sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes);
   const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
 

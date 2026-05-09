@@ -1,7 +1,7 @@
 import React from 'react';
 import './Navbar.css';
 
-const Navbar = () => {
+export const Navbar = () => {
   return (
 <nav className="navbar-container">
   <div className="logo">VOTE<span>CHAIN</span></div>
@@ -12,5 +12,3 @@ const Navbar = () => {
 </nav>
   );
 };
-
-export default Navbar;

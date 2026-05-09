@@ -1,7 +1,7 @@
 import React from 'react';
 import './FinalizationCard.css';
 
-const FinalizationCard = () => {
+export const FinalizationCard = () => {
   return (
     <div className="finalization-card-container">
       <div className="final-header">
@@ -19,5 +19,3 @@ const FinalizationCard = () => {
     </div>
   );
 };
-
-export default FinalizationCard;

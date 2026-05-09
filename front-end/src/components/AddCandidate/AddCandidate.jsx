@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AddCandidate.css';
 
-const AddCandidate = () => {
+export const AddCandidate = () => {
   const [candidateName, setCandidateName] = useState('');
   const [manifesto, setManifesto] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -137,5 +137,3 @@ const AddCandidate = () => {
     </>
   );
 };
-
-export default AddCandidate;

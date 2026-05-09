@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './AdminCandidateList.css';
 import { MOCK_CANDIDATES } from '../../mocks/candidates';
 
-const AdminCandidateList = () => {
+export const AdminCandidateList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [candidates, setCandidates] = useState(MOCK_CANDIDATES);
 
@@ -81,5 +81,3 @@ const SkeletonRows = () => (
     ))}
   </>
 );
-
-export default AdminCandidateList;

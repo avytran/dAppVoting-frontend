@@ -5,7 +5,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
-const Sidebar = () => {
+export const Sidebar = () => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: <GridViewIcon /> },
     { id: 'candidates', label: 'Candidates', icon: <PeopleIcon />, active: true },
@@ -49,5 +49,3 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-export default Sidebar;

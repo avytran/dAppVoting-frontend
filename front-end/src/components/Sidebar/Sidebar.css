@@ -1,0 +1,138 @@
+/* Sidebar.css */
+
+.sidebar-container {
+    width: 280px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.4); /* Slate-900 mờ */
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+}
+
+/* Profile Section */
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1.5rem 2rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-avatar {
+    width: 45px;
+    height: 45px;
+    background: #1e293b;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+.admin-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-name {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.admin-subtext {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* Navigation */
+.sidebar-nav {
+    flex-grow: 1;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.nav-item.active {
+    background: rgba(99, 102, 241, 0.15); /* Màu Indigo nhạt */
+    color: #a5b4fc;
+    position: relative;
+}
+
+/* Đường line xanh mờ bên cạnh item active như trong ảnh */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    right: -1rem;
+    top: 15%;
+    height: 70%;
+    width: 3px;
+    background: #6366f1;
+    box-shadow: 0 0 10px #6366f1;
+    border-radius: 4px;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+}
+
+.nav-icon svg {
+    font-size: 1.3rem;
+}
+
+.nav-label {
+    font-weight: 500;
+}
+
+/* Footer Status */
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.block-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #6366f1;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #6366f1;
+}
+
+.block-number {
+    color: #475569;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}

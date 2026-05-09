@@ -15,7 +15,7 @@
 }
 
 .logo span {
-  color: #3b82f6; /* Màu xanh của chữ CHAIN */
+  color: #3b82f6;
 }
 
 .wallet-section {
@@ -38,6 +38,6 @@
 .dot {
   width: 8px;
   height: 8px;
-  background-color: #22c55e; /* Chấm xanh lá Sepolia */
+  background-color: #22c55e;
   border-radius: 50%;
 }

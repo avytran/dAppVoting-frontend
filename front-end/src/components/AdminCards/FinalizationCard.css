@@ -1,6 +1,6 @@
 .finalization-card-container {
-  background-color: #0f172a; /* Nền tối xanh đen */
-  border: 1px solid #453513; /* Viền màu đồng tối */
+  background-color: #0f172a;
+  border: 1px solid #453513;
   border-radius: 12px;
   padding: 24px;
   max-width: 500px;
@@ -19,13 +19,13 @@
 }
 
 .final-header h3 {
-  color: #f59e0b; /* Màu vàng thương hiệu */
+  color: #f59e0b;
   margin: 0;
   font-size: 22px;
 }
 
 .final-description {
-  color: #927c4b; /* Màu chữ vàng trầm */
+  color: #927c4b;
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 20px;
@@ -34,16 +34,16 @@
 .btn-finalized {
   width: 100%;
   padding: 14px;
-  background-color: #1e293b; /* Nút màu xám tối */
+  background-color: #1e293b;
   border: 1px solid #334155;
   border-radius: 8px;
-  color: #64748b; /* Chữ xám */
+  color: #64748b;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  cursor: not-allowed; /* Hiện icon cấm vì đã finalized */
+  cursor: not-allowed;
 }
 
 .check-icon {

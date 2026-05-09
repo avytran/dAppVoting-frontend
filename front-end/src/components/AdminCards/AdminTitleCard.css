@@ -1,5 +1,5 @@
 .admin-title-card {
-  background-color: #05080f; /* Màu nền tối như thiết kế */
+  background-color: #05080f;
   border: 1px solid #1e293b;
   border-radius: 8px;
   padding: 30px;
@@ -12,7 +12,7 @@
 }
 
 .security-label {
-  color: #10b981; /* Màu xanh lá cho chữ SECURITY */
+  color: #10b981;
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 1px;
@@ -30,10 +30,9 @@
 }
 
 .connection-info span {
-  color: #818cf8; /* Màu tím nhạt cho địa chỉ ví */
+  color: #818cf8;
 }
 
-/* Cái nút màu vàng đen bên phải */
 .status-badge {
   background-color: #1a160d;
   border: 1px solid #453513;
@@ -47,7 +46,7 @@
 .status-dot {
   width: 10px;
   height: 10px;
-  background-color: #f59e0b; /* Màu cam/vàng */
+  background-color: #f59e0b;
   border-radius: 50%;
   box-shadow: 0 0 10px #f59e0b;
 }

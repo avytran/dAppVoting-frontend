@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getContract } from '../../utils/web3';
 import { formatUnixToDatetime } from '../../utils/formatUnixToDateTime';
+import { useToast } from '../../contexts/ToastContext';
 import './ElectionWindow.css';
 
 export const ElectionWindow = () => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const fetchCurrentTimes = useCallback(async () => {
     try {
@@ -40,7 +42,7 @@ export const ElectionWindow = () => {
       console.log("Transaction Hash:", tx.hash);
       await tx.wait();
       
-      alert("Time updated successfully!");
+      showSuccess("Time updated successfully!");
       
       await fetchCurrentTimes();
 

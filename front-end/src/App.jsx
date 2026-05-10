@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { AdminPortal } from './pages/AdminPortal';
 import { Dashboard } from './pages/Dashboard';
+import { useToast } from './contexts/ToastContext';
 import './App.css';
 
 const ADMIN_ADDRESS = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".toLowerCase();
@@ -10,6 +11,7 @@ function App() {
   const [account, setAccount] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const { showError } = useToast();
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -20,7 +22,7 @@ function App() {
         console.error("User denied account access");
       }
     } else {
-      alert("Please install MetaMask!");
+      showError("Please install MetaMask!");
     }
   };
 

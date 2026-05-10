@@ -1,27 +1,21 @@
 import React, { useState } from 'react';
 import './AddCandidate.css';
 import { getContract } from '../../utils/web3';
+import { useToast } from '../../contexts/ToastContext';
 
 export const AddCandidate = () => {
   const [candidateName, setCandidateName] = useState('');
   const [manifesto, setManifesto] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const { showSuccess, showError } = useToast();
 
   const estimatedGas = '~0.0042 ETH';
-
-  const showToast = (message, type) => {
-    setToast({ show: true, message, type });
-    setTimeout(() => {
-      setToast({ show: false, message: '', type: '' });
-    }, 3000);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!candidateName.trim()) {
-      showToast('Please fill the candidate name', 'error');
+      showError('Please fill the candidate name');
       return;
     }
 
@@ -32,11 +26,11 @@ export const AddCandidate = () => {
 
       const tx = await contract.addCandidate(candidateName);
 
-      showToast('Transaction sent! Waiting for confirmation from Blockchain...', 'success');
+      showSuccess('Transaction sent! Waiting for confirmation from Blockchain...');
 
       await tx.wait();
 
-      showToast('Candidate added successfully!', 'success');
+      showSuccess('Candidate added successfully!');
 
       setCandidateName('');
       setManifesto('');
@@ -45,7 +39,7 @@ export const AddCandidate = () => {
       console.error("Add Candidate Error", error);
 
       const errorMessage = error.reason || error.message || "Transaction failed!";
-      showToast(errorMessage, 'error');
+      showError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -114,14 +108,6 @@ export const AddCandidate = () => {
             )}
           </button>
         </form>
-
-        {/* Success/Error Message */}
-        {toast.show && (
-          <div className={`toast-message ${toast.type}`}>
-            <i className={toast.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'}></i>
-            {toast.message}
-          </div>
-        )}
       </div>
     </>
   );

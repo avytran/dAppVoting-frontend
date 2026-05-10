@@ -3,12 +3,14 @@ import './CandidateList.css';
 import CheckCircleIcon from '@mui/icons-material/Check';
 import { MOCK_CANDIDATES } from '../../mocks/candidates';
 import { getContract } from '../../utils/web3';
+import { useToast } from '../../contexts/ToastContext';
 
 export const CandidateList = () => {
   const [candidates, setCandidates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userHasVoted, setUserHasVoted] = useState(false);
   const [votedId, setVotedId] = useState(null);
+  const { showSuccess, showError } = useToast();
 
   const loadBlockchainData = async () => {
     try {
@@ -56,12 +58,12 @@ export const CandidateList = () => {
     try {
       const contract = await getContract();
       const tx = await contract.vote(id);
-      alert("Please confirm the transaction in MetaMask");
+      showSuccess("Please confirm the transaction in MetaMask");
       await tx.wait();
-      alert("Vote successful!");
+      showSuccess("Vote successful!");
       loadBlockchainData();
     } catch (error) {
-      alert(error.reason || "Transaction failed");
+      showError(error.reason || "Transaction failed");
     }
   };
 

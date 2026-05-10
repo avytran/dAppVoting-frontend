@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './AdminCandidateList.css';
 import { getContract } from '../../utils/web3';
+import { useToast } from '../../contexts/ToastContext';
 
 export const AdminCandidateList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [candidates, setCandidates] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const { showSuccess } = useToast();
 
   const loadBlockchainData = async () => {
     try {
@@ -47,7 +49,7 @@ export const AdminCandidateList = () => {
       
       await tx.wait();
       
-      alert("Candidate deleted successfully!");
+      showSuccess("Candidate deleted successfully!");
       await loadBlockchainData();
     } catch (error) {
       console.error("Delete error:", error);

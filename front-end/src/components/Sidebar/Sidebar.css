@@ -1,9 +1,7 @@
-/* Sidebar.css */
-
 .sidebar-container {
     width: 280px;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.4); /* Slate-900 mờ */
+    background: rgba(15, 23, 42, 0.4);
     backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
@@ -76,12 +74,11 @@
 }
 
 .nav-item.active {
-    background: rgba(99, 102, 241, 0.15); /* Màu Indigo nhạt */
+    background: rgba(99, 102, 241, 0.15);
     color: #a5b4fc;
     position: relative;
 }
 
-/* Đường line xanh mờ bên cạnh item active như trong ảnh */
 .nav-item.active::after {
     content: '';
     position: absolute;

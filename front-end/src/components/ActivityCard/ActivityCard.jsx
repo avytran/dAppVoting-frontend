@@ -1,36 +1,82 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MOCK_ACTIVITIES } from '../../mocks/activities';
 import './ActivityCard.css';
+import { getContract } from '../../utils/web3';
 
 export const ActivityCard = () => {
   const [activities, setActivities] = useState(MOCK_ACTIVITIES)
   const [secondsAgo, setSecondsAgo] = useState(23);
   const [showModal, setShowModal] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '', color: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Update timestamp for pending transaction
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsAgo(prev => prev + 30);
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  const fetchBlockchainEvents = async () => {
+    try {
+      const contract = await getContract();
 
-  const formatTimestamp = () => {
-    const minutes = Math.floor(secondsAgo / 60);
-    const secs = secondsAgo % 60;
-    if (minutes < 1) {
-      return `~ ${secs} sec ago`;
+      const currentBlock = await contract.runner.provider.getBlockNumber();
+
+      const fromBlock = Math.max(0, currentBlock - 1000);
+
+      const filter = contract.filters.Voted();
+      const events = await contract.queryFilter(filter, fromBlock, "latest");
+
+      const formattedEvents = events.map((event, index) => {
+        const { voter, candidateId, candidateName, timestamp } = event.args;
+        return {
+          id: event.transactionHash || `vote-${index}`,
+          type: 'confirmed',
+          statusText: 'Confirmed',
+          icon: 'fa-vote-yea',
+          title: 'New Vote Cast',
+          targetName: candidateName,
+          candidateId: Number(candidateId),
+          address: `${voter.substring(0, 6)}...${voter.substring(38)}`,
+          fullAddress: voter,
+          timestamp: Number(timestamp),
+          blockNumber: event.blockNumber
+        };
+      }).reverse();
+
+      setActivities(formattedEvents);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Fetch events Error:", error);
+      setIsLoading(false);
     }
-    return `~ ${minutes} min ${secs > 0 ? secs + 's' : ''} ago`;
   };
 
-  const showToast = useCallback((message, color) => {
-    setToast({ show: true, message, color });
-    setTimeout(() => {
-      setToast({ show: false, message: '', color: '' });
-    }, 2200);
+  useEffect(() => {
+    fetchBlockchainEvents();
+
+    let contract;
+    const subscribeToEvents = async () => {
+      contract = await getContract();
+      contract.on("Voted", (voter, candidateId, candidateName, timestamp) => {
+        const newActivity = {
+          id: Date.now(),
+          type: 'confirmed',
+          statusText: 'Just Now',
+          icon: 'fa-vote-yea',
+          title: 'New Vote Cast',
+          targetName: candidateName,
+          candidateId: Number(candidateId),
+          address: `${voter.substring(0, 6)}...${voter.substring(38)}`,
+          timestamp: Math.floor(Date.now() / 1000),
+        };
+        setActivities(prev => [newActivity, ...prev]);
+      });
+    };
+
+    subscribeToEvents();
+    return () => contract?.removeAllListeners();
   }, []);
+
+  const formatTimestamp = (ts) => {
+    const now = Math.floor(Date.now() / 1000);
+    const diff = now - ts;
+    if (diff < 60) return `${diff} sec ago`;
+    return `${Math.floor(diff / 60)} min ago`;
+  };
 
   const copyToClipboard = useCallback(async (text) => {
     try {
@@ -59,7 +105,6 @@ export const ActivityCard = () => {
     }
   };
 
-  // Handle ESC key
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === 'Escape' && showModal) {
@@ -72,62 +117,53 @@ export const ActivityCard = () => {
 
   return (
     <>
-      <div className="activity-card">
+      <div className="activity-card glass-panel">
         <div className="card-header">
           <div className="title-section">
-            <i className="fas fa-link"></i>
+            <i className="fas fa-link icon-indigo"></i>
             <h2>On-chain Activity</h2>
           </div>
-          <div className="live-badge"><i className="fas fa-circle"></i> LIVE</div>
+          <div className="live-badge pulse"><i className="fas fa-circle"></i> LIVE</div>
         </div>
 
         <div className="activity-list">
-          {activities.slice(0, 3).map((item) => (
-            <div key={item.id} className={`activity-item ${item.type}-item`}>
-              <div className="activity-header">
-                <span className={`badge-status badge-${item.type}`}>
-                  <i className={item.type === 'pending' ? 'fas fa-clock' : 'fas fa-check-circle'}></i> {item.statusText}
-                </span>
-                <span className="timestamp">
-                  {item.type === 'pending' ? <i className="far fa-hourglass-half"></i> : <i className="fas fa-check-double"></i>}
-                  {' '}{formatTimestamp(item.timestamp)}
-                </span>
-              </div>
-
-              <div className="activity-title">
-                <i className={`fas ${item.icon}`}></i>
-                <span>
-                  {item.title} {item.targetName && <span className="vote-name">{item.targetName}</span>}
-                  {item.candidateId && <span className="candidate-tag">Candidate #{item.candidateId}</span>}
-                </span>
-              </div>
-
-              {/* Conditional Rendering based on item data */}
-              {item.address && (
-                <div className="address-hash" onClick={() => copyToClipboard(item.address)}>
-                  <i className="fas fa-user-astronaut"></i> {item.address} {item.role && `(${item.role})`}
+          {isLoading ? (
+            <div className="loading-text">Scanning blocks...</div>
+          ) : (
+            activities.slice(0, 3).map((item) => (
+              <div key={item.id} className={`activity-item ${item.type}-item`}>
+                <div className="activity-header">
+                  <span className={`badge-status badge-${item.type}`}>
+                    <i className="fas fa-check-circle"></i> {item.statusText}
+                  </span>
+                  <span className="timestamp">
+                    <i className="fas fa-check-double"></i> {formatTimestamp(item.timestamp)}
+                  </span>
                 </div>
-              )}
 
-              {item.type === 'pending' ? (
-                <div className="gas-info">
-                  <span><i className="fas fa-gas-pump"></i> Est. gas: {item.gasEst}</span>
-                  <span><i className="fas fa-charging-station"></i> Fee: {item.priorityFee}</span>
+                <div className="activity-title">
+                  <i className={`fas ${item.icon}`}></i>
+                  <span>
+                    {item.title} <strong>{item.targetName}</strong>
+                    <span className="candidate-tag">ID: {item.candidateId}</span>
+                  </span>
                 </div>
-              ) : (
+
+                <div className="address-hash" onClick={() => navigator.clipboard.writeText(item.fullAddress)}>
+                  <i className="fas fa-user-astronaut"></i> {item.address}
+                </div>
+
                 <div className="block-info">
-                  <span><i className="fas fa-cube"></i> <strong className="blue-text">Block #{item.blockNumber}</strong></span>
-                  <span className="separator-dot"></span>
-                  <span><i className="fas fa-gas-pump"></i> Gas: {item.gasUsed}</span>
+                  <span><i className="fas fa-cube"></i> Block <strong>#{item.blockNumber || 'Pending'}</strong></span>
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="history-footer">
           <div onClick={() => setShowModal(true)} className="history-link">
-            <span>VIEW FULL HISTORY</span> <i className="fas fa-arrow-right"></i>
+            <span>VIEW ALL LOGS</span> <i className="fas fa-arrow-right"></i>
           </div>
         </div>
       </div>

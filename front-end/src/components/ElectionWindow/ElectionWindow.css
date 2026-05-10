@@ -1,10 +1,9 @@
 .election-window-card {
-  background-color: #0f1123; /* Màu nền tối đồng nhất với banner */
+  background-color: #0f1123;
   border: 1px solid #1a1d35;
   border-radius: 20px;
   padding: 30px;
   width: 100%;
-  max-width: 500px;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -19,7 +18,7 @@
 
 .clock-icon {
   font-size: 24px;
-  color: #7d84ff; /* Màu xanh tím nhạt của icon đồng hồ */
+  color: #7d84ff;
 }
 
 .election-header h2 {
@@ -44,12 +43,12 @@
 .input-field-group label {
   font-size: 12px;
   font-weight: 600;
-  color: #6c727f; /* Màu label muted */
+  color: #6c727f;
   text-transform: capitalize;
 }
 
 .input-wrapper {
-  background-color: #0b0e1a; /* Màu nền ô input tối hơn */
+  background-color: #0b0e1a;
   border: 1px solid #1a1d35;
   border-radius: 12px;
   padding: 12px;
@@ -70,7 +69,7 @@
 
 .update-transaction-btn {
   width: 100%;
-  background-color: rgba(125, 132, 255, 0.1); /* Màu nền nút nhạt */
+  background-color: rgba(125, 132, 255, 0.1);
   border: 1px solid #313666;
   color: #a5a9ff;
   padding: 16px;
@@ -93,4 +92,19 @@
 
 .update-transaction-btn i {
   font-size: 14px;
+}
+
+input[type="datetime-local"] {
+  background-color: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  color-scheme: dark;
+}
+
+.update-transaction-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

@@ -156,6 +156,41 @@
   color: #a5b4fc;
 }
 
+.actions-cell {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-delete-candidate {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  color: #ff4d4d;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-candidate:hover {
+  background: #ff4d4d;
+  color: white;
+  transform: scale(1.1);
+}
+
+.btn-delete-candidate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.btn-delete-candidate .material-symbols-outlined {
+  font-size: 18px;
+}
+
 /* Skeleton Styles */
 .skeleton-item {
   background: rgba(30, 41, 59, 0.5);

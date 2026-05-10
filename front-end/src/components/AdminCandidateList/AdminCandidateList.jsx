@@ -1,10 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AdminCandidateList.css';
-import { MOCK_CANDIDATES } from '../../mocks/candidates';
+import { getContract } from '../../utils/web3';
+import { useToast } from '../../contexts/ToastContext';
 
 export const AdminCandidateList = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [candidates, setCandidates] = useState(MOCK_CANDIDATES);
+  const [isLoading, setIsLoading] = useState(true);
+  const [candidates, setCandidates] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { showSuccess } = useToast();
+
+  const loadBlockchainData = async () => {
+    try {
+      const contract = await getContract();
+      const count = await contract.candidatesCount();
+      const tempCandidates = [];
+
+      for (let i = 1; i <= count; i++) {
+        const deleted = await contract.isDeleted(i);
+        if (!deleted) {
+          const c = await contract.candidates(i);
+          tempCandidates.push({
+            id: Number(c.id),
+            name: c.name,
+            voteCount: Number(c.voteCount),
+            status: "Confirmed",
+            manifesto: "Click to view manifesto"
+          });
+        }
+      }
+
+      setCandidates(tempCandidates);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Fetching candidates error:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteCandidate = async (candidateId) => {
+    if (!window.confirm(`Are you sure you want to delete candidate #${candidateId}?`)) return;
+
+    try {
+      setIsProcessing(true);
+      const contract = await getContract();
+      
+      const tx = await contract.deleteCandidate(candidateId);
+      console.log("Deleting transaction sent:", tx.hash);
+      
+      await tx.wait();
+      
+      showSuccess("Candidate deleted successfully!");
+      await loadBlockchainData();
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Error: " + (error.reason || "Transaction failed"));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  useEffect(() => {
+    loadBlockchainData();
+  }, []);
 
   return (
     <section className="admin-candidate-section glass-panel">
@@ -28,26 +85,22 @@ export const AdminCandidateList = () => {
               <th>Candidate</th>
               <th>Manifesto</th>
               <th>Transaction Status</th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <SkeletonRows />
             ) : (
-              candidates.map((candidate, index) => (
-                <tr key={index} className="table-row">
+              candidates.map((candidate) => (
+                <tr key={candidate.id} className="table-row">
                   <td>
                     <div className="candidate-info">
-                      <div className="avatar-circle">
-                        {candidate.id}
-                      </div>
+                      <div className="avatar-circle">{candidate.id}</div>
                       <span className="candidate-name">{candidate.name}</span>
                     </div>
                   </td>
-                  <td className="manifesto-cell">
-                    {candidate.manifesto}
-                  </td>
+                  <td className="manifesto-cell">{candidate.manifesto}</td>
                   <td>
                     <span className="status-badge-confirmed">
                       <span className="material-symbols-outlined status-icon">check_circle</span>
@@ -55,8 +108,12 @@ export const AdminCandidateList = () => {
                     </span>
                   </td>
                   <td>
-                    <button className="btn-view-tx">
-                      View Tx <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    <button 
+                      className="btn-delete-candidate"
+                      onClick={() => handleDeleteCandidate(candidate.id)}
+                      disabled={isProcessing}
+                    >
+                      <span className="material-symbols-outlined">delete</span>
                     </button>
                   </td>
                 </tr>

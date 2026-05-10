@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AddCandidate.css';
+import { getContract } from '../../utils/web3';
 
 export const AddCandidate = () => {
   const [candidateName, setCandidateName] = useState('');
@@ -18,35 +19,36 @@ export const AddCandidate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!candidateName.trim()) {
-      showToast('Please enter candidate name', 'error');
+      showToast('Please fill the candidate name', 'error');
       return;
     }
-    
-    if (!manifesto.trim()) {
-      showToast('Please enter manifesto/bio', 'error');
-      return;
-    }
-    
+
     setIsSubmitting(true);
-    
-    // Simulate blockchain transaction
-    setTimeout(() => {
-      console.log('Submitting candidate:', {
-        name: candidateName,
-        manifesto: manifesto,
-        gas: estimatedGas,
-        timestamp: new Date().toISOString()
-      });
-      
-      showToast('Transaction submitted successfully! Waiting for confirmation...', 'success');
+
+    try {
+      const contract = await getContract();
+
+      const tx = await contract.addCandidate(candidateName);
+
+      showToast('Transaction sent! Waiting for confirmation from Blockchain...', 'success');
+
+      await tx.wait();
+
+      showToast('Candidate added successfully!', 'success');
+
+      setCandidateName('');
+      setManifesto('');
+
+    } catch (error) {
+      console.error("Add Candidate Error", error);
+
+      const errorMessage = error.reason || error.message || "Transaction failed!";
+      showToast(errorMessage, 'error');
+    } finally {
       setIsSubmitting(false);
-      
-      // Optional: Clear form after success
-      // setCandidateName('');
-      // setManifesto('');
-    }, 2000);
+    }
   };
 
   return (
@@ -95,22 +97,9 @@ export const AddCandidate = () => {
             <p className="form-hint">Describe candidate's vision, experience, and why they should be elected</p>
           </div>
 
-          {/* Estimated Gas Fees */}
-          <div className="gas-fees-box">
-            <i className="fas fa-gas-pump"></i>
-            <div className="gas-info">
-              <span className="gas-label">Estimated Gas Fees</span>
-              <span className="gas-value">{estimatedGas}</span>
-            </div>
-            <div className="gas-tooltip">
-              <i className="fas fa-info-circle"></i>
-              <span className="tooltip-text">Gas fees may vary based on network congestion</span>
-            </div>
-          </div>
-
           {/* Submit Button */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
             disabled={isSubmitting}
           >

@@ -14,22 +14,23 @@ export const AdminPortal = () => {
   return (
     <div className="admin-layout">
       <Sidebar />
-      
+
       <div className="admin-main">
         <Navbar />
-        <AdminTitleCard />
-        <div className="admin-content-grid">
-          <div className="admin-left-col">
-            <AddCandidate />
-            <AdminCandidateList />
-          </div>
-          
-          <div className="admin-right-col">
-            <ElectionWindow />
-            <FinalizationCard />
-          </div>
-        </div>
+        <div className="admin-content">
+          <AdminTitleCard />
+          <div className="admin-content-grid">
+            <div className="admin-left-col">
+              <AddCandidate />
+            </div>
 
+            <div className="admin-right-col">
+              <ElectionWindow />
+              <FinalizationCard />
+            </div>
+          </div>
+          <AdminCandidateList />
+        </div>
         <Footer />
       </div>
     </div>

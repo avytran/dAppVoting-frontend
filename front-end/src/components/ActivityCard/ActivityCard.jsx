@@ -66,7 +66,6 @@ export const ActivityCard = () => {
         };
         
         setActivities(prev => [newActivity, ...prev]);
-        showSuccess(`New vote for ${candidateName}!`);
       });
     };
 

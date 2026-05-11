@@ -17,8 +17,13 @@ export const ToastProvider = ({ children }) => {
   const addToast = (message, type = 'info') => {
     const id = Date.now() + Math.random();
     const msg = String(message || 'Notification');
-    
-    setToasts((prev) => [...prev, { id, message: msg, type }]);
+
+    setToasts((prev) => {
+      if (prev.some((toast) => toast.message === msg && toast.type === type)) {
+        return prev;
+      }
+      return [...prev, { id, message: msg, type }];
+    });
 
     setTimeout(() => {
       removeToast(id);

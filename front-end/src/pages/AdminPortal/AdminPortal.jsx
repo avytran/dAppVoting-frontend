@@ -26,7 +26,7 @@ export const AdminPortal = () => {
 
             <div className="admin-right-col">
               <ElectionWindow />
-              <FinalizationCard />
+              {/* <FinalizationCard /> */}
             </div>
           </div>
           <AdminCandidateList />

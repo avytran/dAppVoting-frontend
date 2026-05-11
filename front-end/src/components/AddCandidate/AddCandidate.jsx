@@ -9,8 +9,6 @@ export const AddCandidate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showSuccess, showError } = useToast();
 
-  const estimatedGas = '~0.0042 ETH';
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,22 +71,6 @@ export const AddCandidate = () => {
               disabled={isSubmitting}
             />
             <p className="form-hint">Enter the full name of the candidate</p>
-          </div>
-
-          {/* Manifesto & Bio */}
-          <div className="form-group">
-            <label className="form-label">
-              <i className="fas fa-file-alt"></i> Manifesto & Bio
-            </label>
-            <textarea
-              className="form-textarea"
-              placeholder="Briefly describe candidate's vision, goals, and background..."
-              rows="5"
-              value={manifesto}
-              onChange={(e) => setManifesto(e.target.value)}
-              disabled={isSubmitting}
-            ></textarea>
-            <p className="form-hint">Describe candidate's vision, experience, and why they should be elected</p>
           </div>
 
           {/* Submit Button */}

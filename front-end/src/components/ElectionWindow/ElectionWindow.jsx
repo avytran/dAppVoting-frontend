@@ -25,9 +25,34 @@ export const ElectionWindow = () => {
 
   useEffect(() => {
     fetchCurrentTimes();
-  }, [fetchCurrentTimes]);
+
+    let votingContract;
+    const setupListener = async () => {
+      votingContract = await getContract();
+
+      votingContract.on("VotingPeriodUpdated", (newStart, newEnd) => {
+        console.log("Event: Voting period updated on-chain!");
+        setStartTime(formatUnixToDatetime(Number(newStart)));
+        setEndTime(formatUnixToDatetime(Number(newEnd)));
+        showSuccess("Election window updated by Admin!");
+      });
+    };
+
+    setupListener();
+
+    return () => {
+      if (votingContract) {
+        votingContract.removeAllListeners("VotingPeriodUpdated");
+      }
+    };
+  }, [fetchCurrentTimes, showSuccess]);
 
   const handleUpdate = async () => {
+    if (!startTime || !endTime) {
+      showError("Please select both start and end times");
+      return;
+    }
+
     try {
       setIsUpdating(true);
       const contract = await getContract();
@@ -35,19 +60,14 @@ export const ElectionWindow = () => {
       const startUnix = Math.floor(new Date(startTime).getTime() / 1000);
       const endUnix = Math.floor(new Date(endTime).getTime() / 1000);
 
-      const tx = await contract.setVotingPeriod(startUnix, endUnix, {
-        gasLimit: 100000
-      });
+      const tx = await contract.setVotingPeriod(startUnix, endUnix);
 
-      console.log("Transaction Hash:", tx.hash);
+      showSuccess("Transaction submitted! Processing...");
       await tx.wait();
       
-      showSuccess("Time updated successfully!");
-      
-      await fetchCurrentTimes();
-
     } catch (error) {
       console.error("Update Error:", error);
+      showError(error.reason || "Failed to update election window");
     } finally {
       setIsUpdating(false);
     }

@@ -1,117 +1,46 @@
-## 🚀 Tech Stack
+﻿# 💻 VoteChain Frontend - React Application
 
-- **ReactJS**: Robust, flexible front-end library for a responsive, fast, interactive UI.
+Giao diện người dùng được xây dựng bằng React.js, tích hợp Ethers.js để tương tác trực tiếp với Smart Contract đã deploy.
 
----
+## 🛠 Cài đặt
 
-## 📂 Branch Naming Convention
+1. Di chuyển vào thư mục frontend:
+   ```bash
+   cd front-end
+   npm install
+   ```
 
-Branches should be named according to their purpose and task:
+2. Cấu hình biến môi trường (.env)
 
-```plaintext
-<prefix>/<WDA-XX>-<task-name>
+Tạo file `.env` tại thư mục gốc của frontend dựa trên `.env.example` và cấu hình như sau:
+
+```env
+# Địa chỉ contract nhận được sau khi chạy lệnh deploy ở backend
+VITE_VOTING_CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+
+# Địa chỉ ví của Account #0 (Admin) để truy cập quyền quản trị
+VITE_ADMIN_ADDRESS=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
 ```
 
-- **Prefix** options:
-  - `feature/` – for new features
-  - `fix/` – for bug fixes
-  - `chore/` – for non-functional tasks
-  - `refactor/` – for code restructuring
+3. Khởi chạy ứng dụng
 
-> Example: If your task is `[WDA-1][FE]Set up Github repository`, your branch name would be `feature/WDA-1-setup-github-repository`.
-
----
-
-## 💾 Commit Message Convention
-
-Follow a structured commit message format to maintain a clear history:
-
-```plaintext
-<prefix>(<WDA-XX>): <commit message>
+```bash
+npm run dev
 ```
 
-- **Prefix** options:
-  - `feat` – for new features
-  - `fix` – for bug fixes
-  - `chore` – for maintenance tasks
-  - `refactor` – for code restructuring
+Ứng dụng thường sẽ chạy tại: `http://localhost:5173`
 
-> Example: If your branch is `[WDA-5][FE]create header and footer`, your commit message would be `feat(WDA-5): create header and footer`.
+## 💡 Lưu ý khi sử dụng
 
----
+- Kết nối ví: Đảm bảo MetaMask của bạn đang chọn mạng Hardhat Local (đã cấu hình ở backend).
+- Quyền Admin: Chỉ khi bạn đăng nhập bằng ví có địa chỉ trùng với `VITE_ADMIN_ADDRESS`, hệ thống mới hiển thị các tính năng:
+  - Thêm ứng viên
+  - Xóa ứng viên
+  - Thiết lập thời gian bầu cử
+- Đồng bộ hóa: Nếu bạn deploy lại contract mới, bạn PHẢI cập nhật lại `VITE_VOTING_CONTRACT_ADDRESS` trong file `.env` và khởi động lại server React.
 
-## 🔄 Development Workflow
+## 📂 Các thư mục chính
 
-The development process is organized for efficiency and consistency:
-
-1. **Pull** the latest code from the main branch.
-2. **Create a new branch** from the main branch.
-3. **Code** your assigned task.
-4. **Commit** changes and **stash** if needed.
-5. **Switch to main branch** and pull any new updates.
-6. **Switch back to your working branch** and merge any updates from `main` into it.
-7. **Resolve conflicts** if any.
-8. **Push** your branch to the remote repository.
-9. **Create a pull request** and request reviews.
-10. After approval, **squash and merge** the pull request.
-
-```plaintext
-┌───────────────────────────────┐
-│        Pull from Main         │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│    Create New Branch from     │
-│           Main                │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│             Code              │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│     Commit and Stash if       │
-│           Needed              │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│   Switch to Main Branch and   │
-│         Pull Updates          │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│   Switch to Working Branch    │
-│    and Merge Updates from     │
-│            Main               │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│   Resolve Conflicts if Any    │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│          Push to Remote       │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│      Create Pull Request      │
-│   and Request Review from     │
-│            Others             │
-└──────────────┬────────────────┘
-               │
-               ▼
-┌───────────────────────────────┐
-│  After Approval, Squash and   │
-│            Merge              │
-└───────────────────────────────┘
-```
-
----
+- `src/abis`: Chứa file `Voting.json` (định nghĩa ABI và các hàm của contract).
+- `src/utils/web3.js`: Chứa logic kết nối với Ethers.js.
+- `src/pages`: Chứa giao diện `Dashboard` (Cử tri) và `AdminPortal` (Quản trị).

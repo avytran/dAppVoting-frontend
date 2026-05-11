@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './AdminCandidateList.css';
 import { getContract } from '../../utils/web3';
 import { useToast } from '../../contexts/ToastContext';
@@ -9,7 +9,7 @@ export const AdminCandidateList = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const { showSuccess } = useToast();
 
-  const loadBlockchainData = async () => {
+  const loadBlockchainData = useCallback(async () => {
     try {
       const contract = await getContract();
       const count = await contract.candidatesCount();
@@ -35,7 +35,36 @@ export const AdminCandidateList = () => {
       console.error("Fetching candidates error:", error);
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadBlockchainData();
+
+    let votingContract;
+
+    const setupEventListeners = async () => {
+      votingContract = await getContract();
+
+      votingContract.on("CandidateAdded", (id, name) => {
+        console.log("Event: New candidate detected!", name);
+        loadBlockchainData();
+      });
+
+      votingContract.on("CandidateDeleted", (id) => {
+        console.log("Event: Candidate deleted detected!", id);
+        loadBlockchainData();
+      });
+    };
+
+    setupEventListeners();
+
+    return () => {
+      if (votingContract) {
+        votingContract.removeAllListeners("CandidateAdded");
+        votingContract.removeAllListeners("CandidateDeleted");
+      }
+    };
+  }, [loadBlockchainData]);
 
   const handleDeleteCandidate = async (candidateId) => {
     if (!window.confirm(`Are you sure you want to delete candidate #${candidateId}?`)) return;
@@ -43,14 +72,13 @@ export const AdminCandidateList = () => {
     try {
       setIsProcessing(true);
       const contract = await getContract();
-      
+
       const tx = await contract.deleteCandidate(candidateId);
       console.log("Deleting transaction sent:", tx.hash);
-      
+
       await tx.wait();
-      
+
       showSuccess("Candidate deleted successfully!");
-      await loadBlockchainData();
     } catch (error) {
       console.error("Delete error:", error);
       alert("Error: " + (error.reason || "Transaction failed"));
@@ -58,10 +86,6 @@ export const AdminCandidateList = () => {
       setIsProcessing(false);
     }
   };
-
-  useEffect(() => {
-    loadBlockchainData();
-  }, []);
 
   return (
     <section className="admin-candidate-section glass-panel">
@@ -77,7 +101,7 @@ export const AdminCandidateList = () => {
           </span>
         </div>
       </div>
-      
+
       <div className="table-container">
         <table className="candidate-table">
           <thead>
@@ -108,7 +132,7 @@ export const AdminCandidateList = () => {
                     </span>
                   </td>
                   <td>
-                    <button 
+                    <button
                       className="btn-delete-candidate"
                       onClick={() => handleDeleteCandidate(candidate.id)}
                       disabled={isProcessing}

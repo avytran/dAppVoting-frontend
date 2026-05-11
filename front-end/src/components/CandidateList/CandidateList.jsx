@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './CandidateList.css';
-import CheckCircleIcon from '@mui/icons-material/Check';
 import { MOCK_CANDIDATES } from '../../mocks/candidates';
 import { getContract } from '../../utils/web3';
 import { useToast } from '../../contexts/ToastContext';
@@ -12,12 +11,12 @@ export const CandidateList = () => {
   const [votedId, setVotedId] = useState(null);
   const { showSuccess, showError } = useToast();
 
-  const loadBlockchainData = async () => {
+  const loadBlockchainData = useCallback(async () => {
     try {
       const contract = await getContract();
       const count = await contract.candidatesCount();
-
       const signer = await contract.runner.getAddress();
+      
       const hasVotedStatus = await contract.hasVoted(signer);
       setUserHasVoted(hasVotedStatus);
 
@@ -31,9 +30,6 @@ export const CandidateList = () => {
         const deleted = await contract.isDeleted(i);
         if (!deleted) {
           const c = await contract.candidates(i);
-
-
-
           const candidateId = Number(c.id);
           const extraInfo = MOCK_CANDIDATES.find(m => m.id === candidateId) || {};
 
@@ -41,7 +37,7 @@ export const CandidateList = () => {
             id: candidateId,
             name: c.name,
             voteCount: Number(c.voteCount),
-            image: extraInfo.image || 'https://via.placeholder.com/150',
+            image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus',
             party: extraInfo.party || 'Independent'
           });
         }
@@ -49,27 +45,50 @@ export const CandidateList = () => {
       setCandidates(tempCandidates);
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Load Data Error:", error);
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadBlockchainData();
+
+    let contract;
+    const setupEventListeners = async () => {
+      contract = await getContract();
+
+      contract.on("Voted", (voter, candidateId, candidateName) => {
+        console.log(`New vote detected for ${candidateName}`);
+        loadBlockchainData();
+      });
+
+      contract.on("CandidateAdded", () => loadBlockchainData());
+      contract.on("CandidateDeleted", () => loadBlockchainData());
+    };
+
+    setupEventListeners();
+
+    return () => {
+      if (contract) {
+        contract.removeAllListeners("Voted");
+        contract.removeAllListeners("CandidateAdded");
+        contract.removeAllListeners("CandidateDeleted");
+      }
+    };
+  }, [loadBlockchainData]);
 
   const handleVote = async (id) => {
     try {
       const contract = await getContract();
       const tx = await contract.vote(id);
-      showSuccess("Please confirm the transaction in MetaMask");
+      showSuccess("Transaction sent! Confirming on-chain...");
+      
       await tx.wait();
-      showSuccess("Vote successful!");
-      loadBlockchainData();
+      showSuccess("Thank you for voting!");
     } catch (error) {
-      showError(error.reason || "Transaction failed");
+      showError(error.reason || "Vote failed. Is the election active?");
     }
   };
-
-  useEffect(() => {
-    loadBlockchainData();
-  }, []);
 
   if (isLoading) return <div className="loading">Connecting to Blockchain...</div>;
 
@@ -89,12 +108,10 @@ export const CandidateList = () => {
               className={`candidate-card ${userHasVoted && !isSelected ? 'card-dimmed' : ''} ${isSelected ? 'card-selected' : ''}`}
             >
               <div className="card-content">
-                {/* Avatar Section */}
                 <div className="avatar-wrapper">
                   <img className="avatar-img" alt={candidate.name} src={candidate.image} />
                 </div>
 
-                {/* Info Section */}
                 <div className="info-section">
                   <div className="info-header">
                     <div className="name-box">
@@ -111,7 +128,6 @@ export const CandidateList = () => {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div className="actions-row">
                     {userHasVoted ? (
                       isSelected ? (
@@ -120,7 +136,7 @@ export const CandidateList = () => {
                         </button>
                       ) : (
                         <button className="btn-voted-disabled" disabled>
-                          Closed
+                           Locked
                         </button>
                       )
                     ) : (
@@ -132,7 +148,7 @@ export const CandidateList = () => {
                 </div>
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>

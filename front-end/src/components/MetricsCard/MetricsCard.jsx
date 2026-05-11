@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './MetricsCard.css';
 import chartIcon from "../../assets/icons/chart-icon.png";
 import { getContract } from '../../utils/web3';
@@ -7,7 +7,7 @@ export const MetricsCard = () => {
   const [candidates, setCandidates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchMetrics = async () => {
+  const fetchMetrics = useCallback(async () => {
     try {
       const contract = await getContract();
       const count = await contract.candidatesCount();
@@ -31,13 +31,37 @@ export const MetricsCard = () => {
       console.error("Fetch voting result Error:", error);
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchMetrics();
-    const interval = setInterval(fetchMetrics, 10000);
-    return () => clearInterval(interval);
-  }, []);
+
+    let votingContract;
+    const setupListeners = async () => {
+      votingContract = await getContract();
+
+      votingContract.on("Voted", (voter, candidateId, name) => {
+        console.log(`Metrics update: New vote for ${name}`);
+        fetchMetrics();
+      });
+
+      votingContract.on("CandidateAdded", () => fetchMetrics());
+      votingContract.on("CandidateDeleted", () => fetchMetrics());
+    };
+
+    setupListeners();
+
+    const interval = setInterval(fetchMetrics, 30000);
+
+    return () => {
+      if (votingContract) {
+        votingContract.removeAllListeners("Voted");
+        votingContract.removeAllListeners("CandidateAdded");
+        votingContract.removeAllListeners("CandidateDeleted");
+      }
+      clearInterval(interval);
+    };
+  }, [fetchMetrics]);
 
   const sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes);
   const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);

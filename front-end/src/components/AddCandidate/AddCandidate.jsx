@@ -9,8 +9,6 @@ export const AddCandidate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showSuccess, showError } = useToast();
 
-  const estimatedGas = '~0.0042 ETH';
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

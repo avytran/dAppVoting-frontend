@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './TitleCard.css';
 import { getContract } from '../../utils/web3';
 
@@ -7,7 +7,7 @@ export const TitleCard = () => {
   const [timeLeft, setTimeLeft] = useState('00:00:00');
   const [contractAddress, setContractAddress] = useState('0x000...');
 
-  const loadBlockchainData = async () => {
+  const loadVotesAndAddress = useCallback(async () => {
     try {
       const contract = await getContract();
       setContractAddress(await contract.getAddress());
@@ -19,12 +19,24 @@ export const TitleCard = () => {
         total += Number(c.voteCount);
       }
       setTotalVotes(total);
+    } catch (error) {
+      console.error("Error loading votes:", error);
+    }
+  }, []);
 
-      const endTime = await contract.endTime();
+  useEffect(() => {
+    let timerInterval;
+    let votingContract;
+
+    const init = async () => {
+      await loadVotesAndAddress();
+      
+      votingContract = await getContract();
+      const endTime = await votingContract.endTime();
+
       const updateTimer = () => {
         const now = Math.floor(Date.now() / 1000);
         const diff = Number(endTime) - now;
-
         if (diff > 0) {
           const hours = Math.floor(diff / 3600).toString().padStart(2, '0');
           const mins = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
@@ -36,23 +48,27 @@ export const TitleCard = () => {
       };
 
       updateTimer();
-      const timerInterval = setInterval(updateTimer, 1000);
-      return timerInterval;
-    } catch (error) {
-      console.error("Error loading TitleCard data:", error);
-    }
-  };
+      timerInterval = setInterval(updateTimer, 1000);
 
-  useEffect(() => {
-    let intervalId;
-    loadBlockchainData().then(id => intervalId = id);
-    return () => clearInterval(intervalId);
-  }, []);
+      votingContract.on("Voted", () => {
+        loadVotesAndAddress();
+      });
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(contractAddress);
-    alert("Contract address copied!");
-  };
+      votingContract.on("VotingPeriodUpdated", () => {
+        window.location.reload();
+      });
+    };
+
+    init();
+
+    return () => {
+      if (timerInterval) clearInterval(timerInterval);
+      if (votingContract) {
+        votingContract.removeAllListeners("Voted");
+        votingContract.removeAllListeners("VotingPeriodUpdated");
+      }
+    };
+  }, [loadVotesAndAddress]);
 
   return (
     <div className="voting-banner">
@@ -73,7 +89,6 @@ export const TitleCard = () => {
           </div>
         </div>
       </div>
-
       <i className="fa-solid fa-box-archive decoration-icon"></i>
     </div>
   );

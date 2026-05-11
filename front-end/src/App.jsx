@@ -5,7 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { useToast } from './contexts/ToastContext';
 import './App.css';
 
-const ADMIN_ADDRESS = import.meta.env.VITE_ADMIN_ADDRESS?.toLowerCase() || "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".toLowerCase();
+const ADMIN_ADDRESS = import.meta.env.VITE_ADMIN_ADDRESS?.toLowerCase();
 
 function App() {
   const [account, setAccount] = useState(null);

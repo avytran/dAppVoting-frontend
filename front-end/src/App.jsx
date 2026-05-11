@@ -5,7 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { useToast } from './contexts/ToastContext';
 import './App.css';
 
-const ADMIN_ADDRESS = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".toLowerCase();
+const ADMIN_ADDRESS = import.meta.env.VITE_ADMIN_ADDRESS?.toLowerCase() || "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".toLowerCase();
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -19,7 +19,7 @@ function App() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         handleAccountsChanged(accounts);
       } catch (err) {
-        console.error("User denied account access");
+        console.error("User denied access");
       }
     } else {
       showError("Please install MetaMask!");
@@ -33,9 +33,8 @@ function App() {
       const checkAdmin = userAddr === ADMIN_ADDRESS;
       setIsAdmin(checkAdmin);
       
-      if (checkAdmin) {
-        navigate('/admin');
-      } 
+      if (checkAdmin) navigate('/admin');
+      else navigate('/');
     } else {
       setAccount(null);
       navigate('/');
@@ -57,31 +56,31 @@ function App() {
   return (
     <div className="app-container">
       {!account ? (
-        <div className="flex items-center justify-center min-h-screen bg-slate-950">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-white mb-8">Blockchain Voting System</h1>
-            <button 
-              onClick={connectWallet}
-              className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold transition-all"
-            >
-              Connect MetaMask to Start
+        <div className="connect-wrapper">
+          <div className="connect-card">
+            <div className="icon-box">
+              <i className="fa-solid fa-shield-halved"></i>
+            </div>
+            <h1 className="connect-title">VOTE<span>CHAIN</span></h1>
+            <p className="connect-subtitle">Decentralized Voting Infrastructure</p>
+            
+            <div className="divider-line"></div>
+            
+            <button className="connect-button" onClick={connectWallet}>
+              Connect MetaMask
             </button>
+            
+            <p className="connect-footer">Secure • Transparent • Immutable</p>
           </div>
         </div>
       ) : (
-        <Routes>
-          <Route 
-            path="/admin" 
-            element={isAdmin ? <AdminPortal account={account} /> : <Navigate to="/vote" />} 
-          />
-          
-          <Route 
-            path="/" 
-            element={!isAdmin ? <Dashboard account={account} /> : <Navigate to="/admin" />} 
-          />
-
-          <Route path="*" element={<Navigate to={isAdmin ? "/admin" : "/vote"} />} />
-        </Routes>
+        <div className="main-content">
+          <Routes>
+            <Route path="/admin" element={isAdmin ? <AdminPortal account={account} /> : <Navigate to="/" />} />
+            <Route path="/" element={!isAdmin ? <Dashboard account={account} /> : <Navigate to="/admin" />} />
+            <Route path="*" element={<Navigate to={isAdmin ? "/admin" : "/"} />} />
+          </Routes>
+        </div>
       )}
     </div>
   );

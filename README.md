@@ -66,3 +66,18 @@ npm run dev
 - `src/abis`: Chứa file `Voting.json` (định nghĩa ABI và các hàm của contract).
 - `src/utils/web3.js`: Chứa logic kết nối với Ethers.js.
 - `src/pages`: Chứa giao diện `Dashboard` (Cử tri) và `AdminPortal` (Quản trị).
+
+## Nhóm sinh viên thực hiện
+Nhóm E:
+1.  Nguyễn Mạc Gia Huy	    MSSV: 31231025016
+2.	Nguyễn Nguyên Khuyến 	MSSV: 31231026626
+3.	Nguyễn Thị Thiên Nhi	MSSV: 31231023551
+4.	Lê Vũ Uyên Phương	    MSSV: 31231025809
+5.	Trần Anh Vy			    MSSV: 31231020502
+
+## Giao diện
+### Giao diện Dashboard (Cử tri)
+<img width="1915" height="950" alt="Screenshot 2026-05-14 210036" src="https://github.com/user-attachments/assets/23d9064e-a8b1-4cb6-94f5-08128122ec21" />
+
+### Giao diện AdminPortal (Quản trị)
+<img width="1916" height="957" alt="Screenshot 2026-05-14 210057" src="https://github.com/user-attachments/assets/3ff49155-bc10-42aa-bce6-5a896b8c46a2" />
